@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+			var projectData = null;
+			var projectArray = new Array();
+
+	    function projectReceived(data) {
+				projectData = data;
+				for (var i=0; i < 20; i++) {
+					projectArray[i] = new Array(projectData.projects[i].name, projectData.projects[i].happiness, projectData.projects[i].favorited);
+        }
+				titles = new Array('Project', 'Happiness', 'Hearts');
+				projectArray.unshift(titles);
+	    };
+			
+			google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable(projectArray);
+
+        var options = {
+          title: 'oharethey\'s Knitting Performance',
+          hAxis: {title: 'Project',  titleTextStyle: {color: 'red'}},
+					series:{1:{targetAxisIndex:1}}
+        };
+
+        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+		</script>
+		<script src="http://api.ravelry.com/projects/oharethey/progress.json?callback=projectReceived&key=1fd72fa42dc1d14a847d6ad50e5454c020fe540a&status=finished"></script>
+  </head>
+  <body>
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+  </body>
+</html>
