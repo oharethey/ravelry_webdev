@@ -8,7 +8,7 @@
 	    function projectReceived(data) {
 				projectData = data;
 				for (var i=0; i < projectData.projects.length; i++) {
-					happinessArray[projectData.projects[i].happiness-1] += 1;
+					happinessArray[projectData.projects[i].happiness] += 1;
         }
 	    };
 			google.load("visualization", "1", {packages:["corechart"]});
