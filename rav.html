@@ -1,40 +1,108 @@
 <html>
-  <head>
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
+	<head>
+		<title>lessons from my project data</title>
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		<script type="text/javascript">
 			var projectData = null;
-			var happinessArray = new Array(1,0,0,0,0);
-
-	    function projectReceived(data) {
+			var happinessArray = new Array(0,0,0,0,0);
+			var projectsPerYearArray = new Array;
+			var notesHeartsArray = new Array(new Array('Project', 'Notes Length', 'Hearts'));
+			for (var i=2007; i<=new Date().getFullYear(); i++) {
+				projectsPerYearArray[i] = 0;
+			}
+			
+			function projectReceived(data) {
 				projectData = data;
+				projectData.projects.sort(function(a,b) { return new Date(a.completed) - new Date(b.completed) } );
+				date = new Date(projectData.projects[0].completed)
 				for (var i=0; i < projectData.projects.length; i++) {
 					happinessArray[projectData.projects[i].happiness] += 1;
-        }
-	    };
+					completedDate = new Date(projectData.projects[i].completed);
+					projectsPerYearArray[completedDate.getFullYear()] += 1;
+					if (projectData.projects[i].notes) { notesLength = projectData.projects[i].notes.length; } else { notesLength = 0;}
+					notesHeartsArray[i+1] = new Array(projectData.projects[i].name, notesLength, projectData.projects[i].favorited);
+				}
+			};
+			//todo: try hiding legend in first chart and daring it myself to do the rav smileys
+			//todo: make it pretty - chart sizes, alignment, fonts, colors
 			google.load("visualization", "1", {packages:["corechart"]});
-      google.setOnLoadCallback(drawChart);
-			//todo: use Rav's smiley faces instead of the numbers in the legend
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Happiness Level', 'Percent of Projects'],
-          ['1', happinessArray[0]],
-          ['2', happinessArray[1]],
-          ['3', happinessArray[2]],
-          ['4', happinessArray[3]],
-          ['5', happinessArray[4]]
-        ]);
+			google.setOnLoadCallback(drawCharts);
 
-        var options = {
-          title: 'Project Happiness Breakdown'
-        };
+			function drawCharts() {
+				drawPieChart();
+				drawBarChart();
+				drawLineChart();
+			}
+			
+			function drawPieChart() {
+				var data = google.visualization.arrayToDataTable([
+					['Happiness Level', 'Percent of Projects'],
+					['1', happinessArray[0]],
+					['2', happinessArray[1]],
+					['3', happinessArray[2]],
+					['4', happinessArray[3]],
+					['5', happinessArray[4]]
+				]);
 
-        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-      }
+				var options = {
+					title: 'Project Happiness Breakdown',
+					colors:['#EAF5E7', '#C2EBB1', '#EE0A64', '#B61745', '#000000' ]
+				};
+
+				var chart = new google.visualization.PieChart(document.getElementById('piechart_div'));
+				chart.draw(data, options);
+			}
+			
+			function drawBarChart() {
+				var data = google.visualization.arrayToDataTable([
+					['Year', 'Projects Completed'],
+					['2007', projectsPerYearArray[2007]],
+					['2008', projectsPerYearArray[2008]],
+					['2009', projectsPerYearArray[2009]],
+					['2010', projectsPerYearArray[2010]],
+					['2011', projectsPerYearArray[2011]],
+					['2012', projectsPerYearArray[2012]]
+				]);
+
+				var options = {
+					title: 'Projects By Year',
+					vAxis: {title: 'Year'},
+					colors:['#C2EBB1']
+				};
+
+				var chart = new google.visualization.BarChart(document.getElementById('barchart_div'));
+				chart.draw(data, options);
+			}
+			
+			function drawLineChart() {
+				var data = google.visualization.arrayToDataTable(notesHeartsArray);
+
+				var options = {
+					title: 'Notes Length and Hearts Over Time',
+					hAxis: {textPosition: 'none', title: 'Projects Over Time'},
+					series:{1:{targetAxisIndex:1}}, vAxes:{0:{title:'Notes Length'}, 1:{title:'Hearts'}},
+					colors: ['#C2EBB1', '#B61745'],
+					legend: {position: 'in'}
+				};
+
+				var chart = new google.visualization.LineChart(document.getElementById('linechart_div'));
+				chart.draw(data, options);
+			}
+			
+			
 		</script>
-		<script src="http://api.ravelry.com/projects/oharethey/progress.json?callback=projectReceived&key=1fd72fa42dc1d14a847d6ad50e5454c020fe540a&status=finished"></script>
-  </head>
-  <body>
-    <div id="chart_div" style="width: 900px; height: 500px;"></div>
-  </body>
+		<script src="http://api.ravelry.com/projects/oharethey/progress.json?callback=projectReceived&key=1fd72fa42dc1d14a847d6ad50e5454c020fe540a&status=finished&notes=true"></script>
+	</head>
+	<body>
+		<h1>lessons from my project data</h1>
+		<p>Hi!	Nice to see you here.	 I wanted to use this demo as an opportunity to see what I could learn about myself and my projects (in addition to impressing you, obviously).	 Here's what I've learned:</p>
+		<div id="piechart_div" style="width: 900px; height: 500px;"></div>
+		<p>I am really proud of my FOs</p>
+		
+		<div id="barchart_div" style="width: 900px; height: 500px;"></div>
+		<p>Once I got into knitting, I got way into knitting.	 Also, can you guess what year I got pregnant?</p>
+
+		<div id="linechart_div" style="width: 900px; height: 500px;"></div>
+		<p>Wordiness tends to pay off in hearts.</p>
+	</body>
 </html>
