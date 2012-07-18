@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<title>lessons from my project data</title>
+		<link href="rav.css" rel="Stylesheet" type="text/css" />
 		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 		<script type="text/javascript">
 			var projectData = null;
@@ -14,7 +15,6 @@
 			function projectReceived(data) {
 				projectData = data;
 				projectData.projects.sort(function(a,b) { return new Date(a.completed) - new Date(b.completed) } );
-				date = new Date(projectData.projects[0].completed)
 				for (var i=0; i < projectData.projects.length; i++) {
 					happinessArray[projectData.projects[i].happiness] += 1;
 					completedDate = new Date(projectData.projects[i].completed);
@@ -23,8 +23,7 @@
 					notesHeartsArray[i+1] = new Array(projectData.projects[i].name, notesLength, projectData.projects[i].favorited);
 				}
 			};
-			//todo: try hiding legend in first chart and daring it myself to do the rav smileys
-			//todo: make it pretty - chart sizes, alignment, fonts, colors
+
 			google.load("visualization", "1", {packages:["corechart"]});
 			google.setOnLoadCallback(drawCharts);
 
@@ -46,7 +45,9 @@
 
 				var options = {
 					title: 'Project Happiness Breakdown',
-					colors:['#EAF5E7', '#C2EBB1', '#EE0A64', '#B61745', '#000000' ]
+					colors:['#EAF5E7', '#C2EBB1', '#EE0A64', '#B61745', '#000000' ],
+					legend: {position: 'none'},
+					chartArea:{left:40, top: 50}
 				};
 
 				var chart = new google.visualization.PieChart(document.getElementById('piechart_div'));
@@ -67,7 +68,8 @@
 				var options = {
 					title: 'Projects By Year',
 					vAxis: {title: 'Year'},
-					colors:['#C2EBB1']
+					colors:['#C2EBB1'],
+					chartArea:{left:110, top: 50}
 				};
 
 				var chart = new google.visualization.BarChart(document.getElementById('barchart_div'));
@@ -82,7 +84,8 @@
 					hAxis: {textPosition: 'none', title: 'Projects Over Time'},
 					series:{1:{targetAxisIndex:1}}, vAxes:{0:{title:'Notes Length'}, 1:{title:'Hearts'}},
 					colors: ['#C2EBB1', '#B61745'],
-					legend: {position: 'in'}
+					legend: {position: 'in'},
+					chartArea:{top:40}
 				};
 
 				var chart = new google.visualization.LineChart(document.getElementById('linechart_div'));
@@ -95,14 +98,26 @@
 	</head>
 	<body>
 		<h1>lessons from my project data</h1>
-		<p>Hi!	Nice to see you here.	 I wanted to use this demo as an opportunity to see what I could learn about myself and my projects (in addition to impressing you, obviously).	 Here's what I've learned:</p>
+		<p>Hi!	Nice to see you here.  My name is Christina (<a href="http://www.ravelry.com/people/oharethey">oharethey</a> on Ravelry) and I'm a web developer.</p>
+		<p>This is my application for the Ravelry web developer position.  You asked us to do something fun with our project data, and I decided to use this as opportunity to see what I could learn about myself and my projects (in addition to impressing you, obviously).	 Here's the most interesting stuff I found:</p>
+		<p class="lesson"><b>Lesson One:</b> I am really proud of my FOs.</p>
 		<div id="piechart_div" style="width: 900px; height: 500px;"></div>
-		<p>I am really proud of my FOs</p>
+		<div id="piechart_legend">
+			<ul>
+				<li id="loser"><img src="images/emoticon_loser.png" title="saddest emoticon" alt="crying emoticon" height="15px" width="15px"></li>
+				<li id="unhappy"><img src="images/emoticon_unhappy.png" title="sad emoticon" alt="sad emoticon" height="15px" width="15px"></li>
+				<li id="meh"><img src="images/emoticon_meh.png" title="neutral emoticon" alt="neutral emoticon" height="15px" width="15px"></li>
+				<li id="smile"><img src="images/emoticon_smile.png" title="happy emoticon" alt="smiling emoticon" height="15px" width="15px"></li>
+				<li id="grin"><img src="images/emoticon_grin.png" title="happiest emoticon" alt="grinning emoticon" height="15px" width="15px"></li>
+			</ul>
+		</div>
 		
+		<p class="lesson"><b>Lesson Two:</b> Once I got into knitting, I got way into knitting.  Also, can you guess which year I got pregnant?</p>
 		<div id="barchart_div" style="width: 900px; height: 500px;"></div>
-		<p>Once I got into knitting, I got way into knitting.	 Also, can you guess what year I got pregnant?</p>
 
+		<p class="lesson"><b>Lesson Three:</b> Wordiness tends to pay off in hearts.</p>
 		<div id="linechart_div" style="width: 900px; height: 500px;"></div>
-		<p>Wordiness tends to pay off in hearts.</p>
+		
+		<p>Thanks for taking the time to check out my code!  It was fun to experiment with the Ravelry and GoogleCharts APIs and learn some neat stuff about my knitting behavior.  If you want to discuss whether I am a good fit for the position at Ravelry please feel free to contact me at <a href="mailto:aretheyoh@gmail.com">aretheyoh@gmail.com</a>.</p>
 	</body>
 </html>

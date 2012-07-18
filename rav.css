@@ -1,0 +1,54 @@
+body {
+	margin: 30px 15px 0 30px;
+	font-family: Verdana,'Lucida Sans Unicode','Lucida Grande',Arial,Helvetica,sans-serif;
+}
+
+ul {
+	list-style-type: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+ul li {
+	background-repeat: no-repeat;
+	background-position: 0px 5px;
+	padding-left: 19px;
+	padding-top: 5px;
+}
+
+ul li#loser {
+	background-image: url(images/light_green.png);
+}
+
+ul li#unhappy {
+	background-image: url(images/green.png);
+}
+
+ul li#meh {
+	background-image: url(images/light_red.png);
+}
+
+ul li#smile {
+	background-image: url(images/red.png);
+}
+
+ul li#grin {
+	background-image: url(images/black.png);
+}
+
+.lesson {
+	margin: 25px 0 0 0;
+	clear: both;
+}
+
+#piechart_legend {
+	float: left;
+	z-index: 1;
+	margin-left: -380px;
+	margin-top: 71px;
+}
+
+#piechart_div {
+	float: left;
+	z-index: -1;
+}
